@@ -1,0 +1,18 @@
+from airflow import DAG
+
+from datetime import datetime, timedelta
+from weekday_time import UnevenIntervalsTimetable
+
+args = {
+    'owner': 'Praveen',
+    'start_date': {{ start_date }},
+    'catchup': True,
+    'retries': 1,
+    'retry_delay': timedelta(seconds=5),
+}
+
+dag = DAG(dag_id='{{ dag_id }}',
+          default_args=args,
+          schedule_interval='{{ schedule_interval }}',
+          schedule={{schedule}},
+          )

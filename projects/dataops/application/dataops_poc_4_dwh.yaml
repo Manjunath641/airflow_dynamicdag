@@ -1,0 +1,55 @@
+dags:
+  - dag_id: dynamic_dag_4
+    schedule_interval: '@daily'
+    tasks:
+      - task_name: DWH_example_start
+        task_id: start
+        operator_template: "bashoperator.j2"
+        task_params:
+          bash_command: 'echo "Load data to Postgres example"'
+      - task_name: Create_table
+        task_id: create
+        operator_template: "postgresoperator.j2"
+        task_params:
+          sql: 'create_table.sql'
+          postgres_conn_id: 'postgres_conn'
+        dependancies: DWH_example_start
+      - task_name: insert_data
+        task_id: insert
+        operator_template: "postgresoperator.j2"
+        task_params:
+          sql: 'insert_data.sql'
+          postgres_conn_id: 'postgres_conn'
+        dependancies: Create_table
+      - task_name: admission_data
+        task_id: Load_adm_data
+        operator_template: "postgresoperator.j2"
+        task_params:
+          sql: "insert into hospital_admissions select patient_id,first_name,last_name,timestamp from hospital_trafic where action='admission';"
+          postgres_conn_id: 'postgres_conn'
+        dependancies: insert_data
+      - task_name: dischanrge_data
+        task_id: Load_discharge_data
+        operator_template: "postgresoperator.j2"
+        task_params:
+          sql: "insert into hospital_discharges select patient_id,first_name,last_name,timestamp from hospital_trafic where action='discharge'"
+          postgres_conn_id: 'postgres_conn'
+        dependancies: insert_data
+      - task_name: admission_adm_email
+        task_id: send_email
+        operator_template: "emailoperator.j2"
+        task_params:
+          to: 'nairpraveen413@gmail.com'
+          subject: 'Admission load status'
+          html_content: 'Admission Data has been successfully loaded.'
+        dependancies: admission_data
+      - task_name: discharge_email
+        task_id: send_discharge_email
+        operator_template: "emailoperator.j2"
+        task_params:
+          to: 'nairpraveen413@gmail.com'
+          subject: 'Discharge load status'
+          html_content: 'Discharge Data has been successfully loaded.'
+        dependancies: dischanrge_data
+      
+

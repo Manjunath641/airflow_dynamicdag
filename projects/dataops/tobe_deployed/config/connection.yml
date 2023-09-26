@@ -1,0 +1,25 @@
+- name: file_sense
+  conn_type: File (path)
+  host: 
+  login: 
+  password: 
+  schema: 
+  port: 
+  extra: {'path': '/tmp/test1/test.txt'}
+
+- name: postgres_conn
+  conn_type: postgres
+  host: 107b669742a9
+  login: airflow
+  password: airflow
+  schema: data_warehouse
+  port: 5432
+
+- name: snowflake_test
+  conn_type: snowflake
+  host: https://tj07270.ap-southeast-1.snowflakecomputing.com
+  login: praveennair19
+  password: xxx
+  schema: TPCH_SF1
+  port: 
+  extra: {'warehouse': 'COMPUTE_WH' , 'account': 'tj07270' , 'database': 'SNOWFLAKE_SAMPLE_DATA' , 'region': 'ap-southeast-1', 'role': 'ACCOUNTADMIN'}

@@ -1,0 +1,20 @@
+dags:
+  - dag_id: dynamic_dag__5_timetable
+    schedule: UnevenIntervalsTimetable()
+    start_date: datetime(2023, 9, 21)
+    tasks:
+      - task_name: python_xcom_push
+        task_id: xcom_push_method
+        operator_template: "pythonoperator.j2"
+        code_snippet: 'get_date.py'
+        task_params:
+          python_callable: 'get_date'
+        do_xcom_push: 'True'
+      - task_name: python_xcom_pull
+        task_id: xcom_pull
+        operator_template: "pythonoperator.j2"
+        code_snippet: 'save_date.py'
+        task_params:
+          python_callable: 'save_date'
+        dependancies: python_xcom_push
+      

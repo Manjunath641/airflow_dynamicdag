@@ -1,0 +1,26 @@
+dags:
+  - dag_id: dynamic_dag_2_email
+    schedule_interval: '@daily'
+    start_date: datetime(2023, 9, 25)
+    tasks:
+      - task_name: DWH_example_start
+        task_id: task_1
+        operator_template: "bashoperator.j2"
+        task_params:
+          bash_command: 'echo "Load data to Postgres example"'
+      - task_name: Create_table
+        task_id: task_2
+        operator_template: "postgresoperator.j2"
+        task_params:
+          sql: 'create.sql'
+          postgres_conn_id: 'postgres_conn'
+        dependancies: DWH_example_start
+      - task_name: Send_completion_email
+        task_id: task_3
+        operator_template: "emailoperator.j2"
+        task_params:
+          to: 'nairpraveen413@gmail.com'
+          subject: 'Airflow DWH Test Dag'
+          html_content: 'Data has been successfully loaded.'
+        dependancies: Create_table
+

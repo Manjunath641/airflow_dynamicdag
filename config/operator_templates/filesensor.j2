@@ -1,0 +1,9 @@
+from airflow.contrib.sensors.file_sensor import FileSensor
+
+{{task_name}} = FileSensor(
+    task_id='{{task_id}}',
+    filepath='{{filepath}}',
+    fs_conn_id='{{fs_conn_id}}',
+    poke_interval= {{poke_interval}},
+    dag=dag,
+)

@@ -1,0 +1,8 @@
+from airflow.operators.postgres_operator import PostgresOperator
+
+{{task_name}} = PostgresOperator(
+    task_id='{{task_id}}',
+    sql="{{sql}}",
+    postgres_conn_id='{{postgres_conn_id}}',
+    dag=dag,
+)

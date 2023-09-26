@@ -1,0 +1,9 @@
+from airflow.operators.email import EmailOperator
+
+{{task_name}} =  EmailOperator(
+    task_id='{{task_id}}',
+    to='{{to}}',
+    subject='{{subject}}',
+    html_content='{{html_content}}',
+    dag=dag,
+)

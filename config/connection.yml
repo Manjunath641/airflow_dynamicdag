@@ -1,0 +1,8 @@
+- name: file_sense
+  conn_type: File (path)
+  host: 
+  login: 
+  password: 
+  schema: 
+  port: 
+  extra: {'path': '/tmp/test1/test.txt'}
